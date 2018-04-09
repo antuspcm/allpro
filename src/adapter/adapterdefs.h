@@ -12,6 +12,8 @@
   #define unique_ptr auto_ptr
 #endif
 
+#define TX_LED_ON_P012 // antus@pcmhacking.net has the older hardware
+
 const int TX_LED_PORT =  0;
 const int RX_LED_PORT =  0;
 #ifdef TX_LED_ON_P012
