@@ -32,6 +32,7 @@ private:
     int requestImpl(const uint8_t* data, uint32_t len, uint32_t numOfResp, bool sendReply);
     Timer*     timer_;
     PwmDriver* driver_;
+
 };
 
 #endif //__VPW_H__

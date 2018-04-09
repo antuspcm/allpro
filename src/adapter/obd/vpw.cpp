@@ -41,18 +41,19 @@ void VpwAdapter::open()
  */
 int VpwAdapter::sendToEcu(const Ecumsg* msg)
 {
+	uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
+
     insertToHistory(msg); // Buffer dump
-    
     // Wait for bus to be inactive
     //
-    if (!driver_->wait4Ready(TV6_TX_NOM, TV4_TX_MIN, timer_)) {
+    if (!driver_->wait4Ready(TV6_TX_NOM / speed, TV4_TX_MIN / speed, timer_)) {
         return 0;
     }
 
     TX_LED(true);  // Turn the transmit LED on
 
     // SOF pulse
-    driver_->sendSofVpw(TV3_TX_NOM); // 200us
+    driver_->sendSofVpw(TV3_TX_NOM / speed); // 200us
   
     for (int i = 0; i < msg->length(); i++) {
         uint8_t ch = msg->data()[i];  // sent next byte in buffer
@@ -61,12 +62,12 @@ int VpwAdapter::sendToEcu(const Ecumsg* msg)
         while (bits--) {  // send each bit in the byte
             if (bits & 0x01) { // Passive, set bus to 0
                 if (ch & 0x80)  {
-                    driver_->sendPulseVpw(TV2_TX_NOM); // 128us
-                    Delay1us(TV2_TX_NOM / 2);
+                    driver_->sendPulseVpw(TV2_TX_NOM / speed); // 128us
+                    Delay1us(TV2_TX_NOM / speed / 2);
                 }
                 else {
-                    driver_->sendPulseVpw(TV1_TX_NOM); // 64us
-                    Delay1us(TV1_TX_NOM / 2);
+                    driver_->sendPulseVpw(TV1_TX_NOM / speed); // 64us
+                    Delay1us(TV1_TX_NOM / speed / 2);
                 }
                 if (driver_->getBit()) {
                     driver_->stop();
@@ -76,10 +77,10 @@ int VpwAdapter::sendToEcu(const Ecumsg* msg)
             }
             else {  // Active, set bus to 1
                 if (ch & 0x80) {
-                    driver_->sendPulseVpw(TV1_TX_NOM); // 64us
+                    driver_->sendPulseVpw(TV1_TX_NOM / speed); // 64us
                 }
                 else {
-                    driver_->sendPulseVpw(TV2_TX_NOM); // 128us
+                    driver_->sendPulseVpw(TV2_TX_NOM / speed); // 128us
                 }
             }
             ch <<= 1;
@@ -98,11 +99,13 @@ int VpwAdapter::sendToEcu(const Ecumsg* msg)
  */
 bool VpwAdapter::waitForSof()
 {
+	uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
+
     for (;;) {
-        uint32_t val = driver_->wait4Sof(TV3_RX_MAX, timer_);
+        uint32_t val = driver_->wait4Sof(TV3_RX_MAX / speed, timer_);
         if (val == 0xFFFFFFFF) // P2 timer expired
             return false;
-        if (val >= TV3_RX_MIN) 
+        if (val >= TV3_RX_MIN / speed)
             break;
     }
     return true;
@@ -114,6 +117,7 @@ bool VpwAdapter::waitForSof()
  */
 int VpwAdapter::receiveFromEcu(Ecumsg* msg, int maxLen)
 {
+	uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
     uint8_t* ptr = msg->data();
     msg->length(0); // Reset the buffer byte length
     
@@ -138,13 +142,13 @@ int VpwAdapter::receiveFromEcu(Ecumsg* msg, int maxLen)
                 goto extr; // EOD Max expired, terminate receive on timeout
             }
             state = !state;
-            if (pulse < TV1_RX_MIN) {
+            if (pulse < TV1_RX_MIN / speed) {
                 goto exte; // pulse is too short
             }
-            if (pulse > TV2_RX_MAX) {
+            if (pulse > TV2_RX_MAX / speed) {
                 goto exte; // pulse is too long
             }
-            ch |= (pulse > VPW_RX_MID) ? 1 : 0;
+            ch |= (pulse > VPW_RX_MID / speed) ? 1 : 0;
         }
         *(ptr++) = ch ^ 0x55;
     }

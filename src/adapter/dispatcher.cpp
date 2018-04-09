@@ -23,9 +23,9 @@ using namespace util;
 //
 static const char ErrMessage[] { "?" };
 static const char OkMessage [] { "OK" };
-static const char Version   [] { "1.15" };
+static const char Version   [] { "1.16" };
 static const char Interface [] { "ELM327 v2.1" };
-static const char Copyright [] { "Copyright (c) 2009-2018 ObdDiag.Net" };
+static const char Copyright [] { "Copyright (c) 2009-2018 ObdDiag.Net, PcmHacking.net" };
 static const char Copyright2[] { "This is free software; see the source for copying conditions. There is NO" };
 static const char Copyright3[] { "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." };
 
@@ -510,6 +510,7 @@ static void SetDefault()
     config->setIntProperty(PAR_WAKEUP_VAL, (DEFAULT_WAKEUP_TIME / 20));
     config->setIntProperty(PAR_CAN_TSTR_ADDRESS, TESTER_ADDRESS);
     config->setIntProperty(PAR_CAN_TSTR_ADDRESS, 0xF1);
+    config->setIntProperty(PAR_VPW_SPEED, 1);
 }
 
 /**
@@ -640,6 +641,7 @@ static const DispatchType dispatchTbl[] = {
     { "TP",     PAR_TRY_PROTOCOL,      2,  2, OnSetProtocol          },
     { "V0",     PAR_CAN_VAIDATE_DLC,   0,  0, OnSetValueFalse        },
     { "V1",     PAR_CAN_VAIDATE_DLC,   0,  0, OnSetValueTrue         },
+	{ "VPW",    PAR_VPW_SPEED,         1,  1, OnSetValueInt          },
     { "WM",     PAR_WM_HEADER,         2, 12, OnSetBytes             },
     { "WS",     PAR_WARMSTART,         0,  0, OnReset                },
     { "Z",      PAR_RESET_CPU,         0,  0, OnReset                }

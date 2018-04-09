@@ -17,7 +17,7 @@ using namespace std;
 
 // Config settings
 const int KWP_HDR_LEN      = 5; // 4 header + 1 chksum
-const int OBD_IN_MSG_DLEN  = 8;
+const int OBD_IN_MSG_DLEN  = 255;
 const int OBD_OUT_MSG_DLEN = 255;                            // Binary len
 const int OBD_OUT_MSG_LEN  = OBD_OUT_MSG_DLEN + KWP_HDR_LEN; // Binary buffer size
 const int TX_BUFFER_LEN    = OBD_OUT_MSG_LEN * 3;            // Char buffer size
@@ -97,6 +97,7 @@ enum AT_Requests {
     PAR_SET_BRD,
     PAR_TIMEOUT,
     PAR_TRY_BRD,
+	PAR_VPW_SPEED,
     PAR_WAKEUP_VAL,
     INT_PROPS_END,
     // bytes properties
