@@ -41,7 +41,7 @@ void VpwAdapter::open()
  */
 int VpwAdapter::sendToEcu(const Ecumsg* msg)
 {
-	uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
+    uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
 
     insertToHistory(msg); // Buffer dump
     // Wait for bus to be inactive
@@ -117,7 +117,7 @@ bool VpwAdapter::waitForSof()
  */
 int VpwAdapter::receiveFromEcu(Ecumsg* msg, int maxLen)
 {
-	uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
+    uint8_t speed = config_->getIntProperty(PAR_VPW_SPEED);
     uint8_t* ptr = msg->data();
     msg->length(0); // Reset the buffer byte length
     

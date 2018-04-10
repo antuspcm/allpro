@@ -97,7 +97,7 @@ enum AT_Requests {
     PAR_SET_BRD,
     PAR_TIMEOUT,
     PAR_TRY_BRD,
-	PAR_VPW_SPEED,
+    PAR_VPW_SPEED,
     PAR_WAKEUP_VAL,
     INT_PROPS_END,
     // bytes properties
@@ -181,7 +181,7 @@ private:
 };
 
 //
-// Helper class for insering spaces, depends on ATS0/ATS1
+// Helper class for inserting spaces, depends on ATS0/ATS1
 //
 class Spacer {
 public:
