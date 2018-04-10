@@ -11,10 +11,8 @@
 // SAE J1850 timeouts definition
 //
 enum J1850Limits {
-    J1850_BYTES_MIN =  1,
-    J1850_BYTES_MAX = 12,
     OBD2_BYTES_MIN  =  5, // 3(header) + 1(data) + 1(checksum)
-    OBD2_BYTES_MAX  = 11  // 3(header) + 7(data) + 1(checksum)
+    OBD2_BYTES_MAX  = 255  // 3(header) + 251(data) + 1(checksum)
 };
     
 // J1850 Timeouts
